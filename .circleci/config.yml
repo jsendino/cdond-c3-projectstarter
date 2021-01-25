@@ -13,15 +13,16 @@ jobs:
       - run: mkdir tmp 
       - run: echo "hello" >> tmp/msg.txt
       - persist_to_workspace:
-          root: /tmp
+          root: .
           paths: 
-            - ./*
+            - tmp/*
   print_world:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - attach_workspace:
           at: .
+      - run: ls
       - run: cat tmp/msg.txt >> echo
       - run: echo "world"    
 # Orchestrate or schedule a set of jobs
