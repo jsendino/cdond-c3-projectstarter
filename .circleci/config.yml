@@ -12,9 +12,9 @@ jobs:
     steps:
       - run: echo "hello" >> tmp/msg.txt
       - persist_to_workspace:
-        root: /tmp
-        paths: 
-          - ./*
+          root: /tmp
+          paths: 
+            - ./*
   print_world:
     docker:
       - image: circleci/node:13.8.0
