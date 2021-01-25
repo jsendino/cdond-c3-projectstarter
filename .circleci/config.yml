@@ -33,7 +33,7 @@ jobs:
       - attach_workspace:
           at: .
       - print_pid: 
-        preffix: "This is step 2 in pipeline: "
+          preffix: "This is step 2 in pipeline: "
       - run: ls
       - run: cat tmp/msg.txt
       - run: echo "world"    
