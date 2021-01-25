@@ -5,11 +5,21 @@ orbs:
   # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
   
+command: 
+  print_pid:
+    parameters: 
+      preffix:
+        type: string
+        default: "The pipeline id is: "
+    steps:
+      - run: echo << parameters.preffix >> << pipeline.id >>
+
 jobs: 
   print_hello:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - print_pid 
       - run: mkdir tmp 
       - run: echo "hello" >> tmp/msg.txt
       - persist_to_workspace:
@@ -22,6 +32,8 @@ jobs:
     steps:
       - attach_workspace:
           at: .
+      - print_pid: 
+        preffix: "This is step 2 in pipeline: "
       - run: ls
       - run: cat tmp/msg.txt
       - run: echo "world"    
