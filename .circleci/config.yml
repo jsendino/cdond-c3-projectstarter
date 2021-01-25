@@ -21,7 +21,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - attach_workspace:
-          at: /tmp
+          at: .
       - run: echo tmp/msg.txt
       - run: echo "world"    
 # Orchestrate or schedule a set of jobs
