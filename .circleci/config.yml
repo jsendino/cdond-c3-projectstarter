@@ -5,7 +5,7 @@ orbs:
   # Declare a dependency on the welcome-orb
   welcome: circleci/welcome-orb@0.4.1
   
-command: 
+commands: 
   print_pid:
     parameters: 
       preffix:
