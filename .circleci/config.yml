@@ -19,5 +19,5 @@ jobs:
 workflows:
   main:
     jobs:
-      - pylint .
+      - pylint 
       - build-and-test
