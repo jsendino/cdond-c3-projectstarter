@@ -20,7 +20,7 @@ jobs:
       - python/load-cache
       - run: pip freeze
       - run: echo $PATH
-      - run: python -m pytest .
+      - run: python -m pylint .
 workflows:
   main:
     jobs:
