@@ -16,8 +16,10 @@ jobs:
     executor: python/default
     steps: 
       - checkout
+      - run: pip freeze
       - python/load-cache
       - run: pip freeze
+      - run: echo $PATH
       - run: pylint .
 workflows:
   main:
