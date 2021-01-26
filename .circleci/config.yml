@@ -1,49 +1,21 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
-  
-commands: 
-  print_pid:
-    parameters: 
-      preffix:
-        type: string
-        default: "The pipeline id is: "
-    steps:
-      - run: echo << parameters.preffix >> << pipeline.id >>
 
-jobs: 
-  print_hello:
-    docker:
-      - image: circleci/node:13.8.0
+orbs:
+  python: circleci/python@0.2.1
+
+jobs:
+  build-and-test:
+    executor: python/default
     steps:
-      - print_pid 
-      - run: mkdir tmp 
-      - run: echo "hello" >> tmp/msg.txt
-      - persist_to_workspace:
-          root: .
-          paths: 
-            - tmp/*
-  print_world:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - attach_workspace:
-          at: .
-      - print_pid: 
-          preffix: "This is step 2 in pipeline: "
-      - run: ls
-      - run: cat tmp/msg.txt
-      - run: echo "world"    
-# Orchestrate or schedule a set of jobs
+      - checkout
+      - python/load-cache
+      - python/install-deps
+      - python/save-cache
+      - run:
+          command: ./manage.py test
+          name: Test
+
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
+  main:
     jobs:
-      - print_hello
-      - print_world:
-          requires: 
-            - print_hello
+      - build-and-test
