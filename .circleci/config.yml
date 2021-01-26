@@ -1,11 +1,12 @@
 version: 2.1
 
-orbs:
-  python: circleci/python:3.8
-
 jobs:
   build-and-test:
-    executor: python/default
+    docker:
+      - image: circleci/python:3.8 # every job must define an image for the docker executor and subsequent jobs may define a different image.
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - python/load-cache
