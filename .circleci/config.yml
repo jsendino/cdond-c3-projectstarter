@@ -11,11 +11,13 @@ jobs:
       - python/load-cache
       - python/install-deps
       - python/save-cache
-      - run:
-          command: ./manage.py test
-          name: Test
-
+      - run: pytest
+  analyze:
+    executor: python/default
+    steps: 
+      - pylint .
 workflows:
   main:
     jobs:
+      - pylint .
       - build-and-test
