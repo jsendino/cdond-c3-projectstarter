@@ -20,5 +20,6 @@ jobs:
 workflows:
   main:
     jobs:
-      - analyze 
       - build-and-test
+      - analyze:
+          requires: build-and-test
