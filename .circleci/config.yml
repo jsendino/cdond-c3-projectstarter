@@ -15,7 +15,6 @@ jobs:
     executor: python/default
     steps: 
       - checkout
-      - python/save-cache
       - run: pylint .
 workflows:
   main:
