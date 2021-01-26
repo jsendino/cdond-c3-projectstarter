@@ -1,5 +1,4 @@
 import numpy as np
-import pytz
 
 
 def mean_absolute_percentage_error(y_true, y_pred):
