@@ -17,7 +17,7 @@ jobs:
     steps: 
       - checkout
       - python/load-cache
-      - run: pip --freeze
+      - run: pip freeze
       - run: pylint .
 workflows:
   main:
