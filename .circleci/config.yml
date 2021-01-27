@@ -12,9 +12,11 @@ jobs:
               --stack-name udacity-cd-infra
       - run:
           name: Check fail
-          command:  aws cloudformation describe-stack-events --stack-name udacity-cd-infra
+          command: >
+            aws cloudformation describe-stack-events --stack-name udacity-cd-infra
+            exit
           when: on_fail
 workflows:
   main:
-    jobs:
+    jobs:   
       - create_infra
