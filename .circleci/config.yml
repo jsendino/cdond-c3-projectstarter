@@ -10,6 +10,8 @@ jobs:
          aws cloudformation deploy \
               --template-file template.yml \
               --stack-name udacity-cd-infra
+      - run: >
+          aws cloudformation describe-stack-events --stack-name udacity-cd-infra
 workflows:
   main:
     jobs:
