@@ -9,7 +9,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - run: |
+      - run: >
           aws cloudformation create-stack 
           --stack-name udacity-cd-infra-creation 
           --template-url https://s3-eu-west-1.amazonaws.com/cf-templates-146g4lxm0y808-eu-west-1/20210270J2-template.yml
