@@ -1,31 +1,20 @@
 version: 2.1
 
 jobs:
-  build-and-test:
+  create_infra:
     docker:
-      - image: circleci/python:3.8 # every job must define an image for the docker executor and subsequent jobs may define a different image.
+      - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
-      - python/load-cache
-      - python/install-deps
-      - python/save-cache
-      - run: python -m pytest
-  analyze:
-    executor: python/default
-    steps: 
-      - checkout
-      - run: pip freeze
-      - python/load-cache
-      - run: pip freeze
-      - run: echo $PATH
-      - run: python -m pylint .
+      - run: |
+          aws create-stack 
+          --stack-name udacity-cd-infra-creation 
+          --template-url https://s3-eu-west-1.amazonaws.com/cf-templates-146g4lxm0y808-eu-west-1/20210270J2-template.yml
+          --role-arn arn:aws:iam::563631770844:role/udacity-cloudformation
 workflows:
   main:
     jobs:
-      - build-and-test
-      - analyze:
-          requires: 
-            - build-and-test
+      - create_infra
