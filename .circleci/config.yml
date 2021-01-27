@@ -4,9 +4,6 @@ jobs:
   create_infra:
     docker:
       - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - run: >
