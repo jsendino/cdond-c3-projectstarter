@@ -14,9 +14,9 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      # - add_ssh_keys:
-      #     fingerprints: 
-      #       - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
+      - add_ssh_keys:
+          fingerprints: 
+            - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
       - run: >
         aws cloudformation deploy \
