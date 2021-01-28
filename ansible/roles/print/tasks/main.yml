@@ -9,7 +9,7 @@
  
  - name: copy files
    copy: 
-    src: *
+    src: asd.txt
     dest: .
     backup: yes
 
