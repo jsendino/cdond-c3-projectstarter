@@ -3,13 +3,13 @@ version: 2.1
 jobs:
   create_infra:
     docker:
-      - image: python:3.7-alpine3.11 # every job must define an image for the docker executor and subsequent jobs may define a different image.
+      - image: circleci/python:3.6.1 # every job must define an image for the docker executor and subsequent jobs may define a different image.
     steps:
       - add_ssh_keys:
           fingerprints: 
             - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
-      - run: apt-get install ansible -Y
+      - run: sudo apt-get install ansible -Y
       - run: |
           ansible-playbook ansible/main.yml
 workflows:
