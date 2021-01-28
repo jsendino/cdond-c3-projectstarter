@@ -8,7 +8,7 @@
      msg: "{{ print_result.stdout_lines }}"
 
  - name: shell command
-   shell: ls 
+   shell: ls -R
    register: files
 
  - name: print files
