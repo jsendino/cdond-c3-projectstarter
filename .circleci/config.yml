@@ -12,16 +12,13 @@ commands:
 jobs:
   create_infra:
     docker:
-      - image: amazon/aws-cli
+      - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
     steps:
-      - add_ssh_keys:
-          fingerprints: 
-            - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
       - run: >
-        aws cloudformation deploy \
-                --template-file template.yml \
-                --stack-name udacity-cd-infra
+         aws cloudformation deploy \
+              --template-file template.yml \
+              --stack-name udacity-cd-infra
       - run: 
           name: Delete env if failure
           command: destroy_env udacity-cd-infra
