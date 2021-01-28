@@ -21,7 +21,8 @@ jobs:
               --stack-name udacity-cd-infra
       - run: 
           name: Delete env if failure
-          command: destroy_env udacity-cd-infra
+          command: destroy_env 
+            env_name: udacity-cd-infra
           when: on_fail
       # - run: sudo apt-get install ansible 
       # - run: |
