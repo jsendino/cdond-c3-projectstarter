@@ -11,7 +11,7 @@ jobs:
       - checkout
       - run: sudo apt-get install ansible 
       - run: |
-          ansible-playbook ansible/main.yml -i inventory.txt
+          ansible-playbook ansible/main.yml -i ansible/inventory.txt
 workflows:
   main:
     jobs:   
