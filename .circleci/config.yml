@@ -11,7 +11,8 @@ jobs:
       - checkout
       - run: sudo apt-get install ansible 
       - run: |
-          ansible-playbook --become-user ec2-user ansible/main.yml -i ansible/inventory.txt
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook ansible/main.yml -i ansible/inventory.txt
 workflows:
   main:
     jobs:   
