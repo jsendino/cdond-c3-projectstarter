@@ -3,11 +3,9 @@ version: 2.1
 commands: 
   destroy_env:
     description: "Destroys CloudFormation stack"
-    parameters:
-      env_name: 
-        type: string
     steps:
-      - run: aws cloudformation delete-stack --stack-name << parameters.env_name >> 
+      - run: aws cloudformation delete-stack --stack-name udacity-cd-infra
+        when: on_fail
 
 jobs:
   create_infra:
@@ -15,17 +13,13 @@ jobs:
       - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
     steps:
       - checkout
-      - run: >
+      - run: |
          aws cloudformation deploy \
               --template-file template.yml \
               --stack-name udacity-cd-infra
-      - when:
-          condition: on_fail
-          steps:  
-            - destroy_env:
-                env_name: udacity-cd-infra
-
-        # when: on_fail
+         return 1
+      - destroy_env
+        when: on_fail
       # - run: sudo apt-get install ansible 
       # - run: |
       #     export ANSIBLE_HOST_KEY_CHECKING=False
