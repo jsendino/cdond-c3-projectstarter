@@ -7,8 +7,10 @@ commands:
       env_name: 
         type: string
     steps:
-      - run: aws cloudformation delete-stack --stack-name << parameters.env_name >> 
-        when: on_fail
+      - run:
+          name: Destroy env if error
+          command: aws cloudformation delete-stack --stack-name << parameters.env_name >> 
+          when: on_fail
 
 jobs:
   create_infra:
