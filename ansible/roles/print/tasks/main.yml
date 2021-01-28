@@ -9,8 +9,5 @@
 
  - name: shell command
    shell: |
-     pwd 
-     mkdir test
-     touch test/test.txt
-     echo "asdas" >> test/test.txt
+     ls
      exit 0
