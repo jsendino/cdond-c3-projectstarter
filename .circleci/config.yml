@@ -9,9 +9,9 @@ jobs:
           fingerprints: 
             - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
-      - run: sudo apt-get install ansible -i inventory.txt
+      - run: sudo apt-get install ansible 
       - run: |
-          ansible-playbook ansible/main.yml
+          ansible-playbook ansible/main.yml -i inventory.txt
 workflows:
   main:
     jobs:   
