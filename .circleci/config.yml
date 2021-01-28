@@ -3,19 +3,14 @@ version: 2.1
 jobs:
   create_infra:
     docker:
-      - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
+      - image: python:3.7-alpine3.11 # every job must define an image for the docker executor and subsequent jobs may define a different image.
     steps:
+      - add_ssh_keys:
+          fingerprints: 
+            - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
-      - run: >
-         aws cloudformation deploy \
-              --template-file template.yml \
-              --stack-name udacity-cd-infra
-      - run:
-          name: Check fail
-          command: |
-            aws cloudformation describe-stack-events --stack-name udacity-cd-infra
-            echo "DONE"
-          when: always
+      - run: |
+          ansible-playbook ansible/main.yml
 workflows:
   main:
     jobs:   
