@@ -8,6 +8,9 @@
      msg: "{{ print_result.stdout_lines }}"
 
  - name: shell command
-   shell: |
-     ls
-     exit 0
+   shell: ls
+   register: files
+
+ - name: print files
+   debug:
+     msg: "{{ files.stdout_lines }}"
