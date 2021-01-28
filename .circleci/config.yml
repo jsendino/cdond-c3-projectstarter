@@ -9,10 +9,20 @@ jobs:
           fingerprints: 
             - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
-      - run: sudo apt-get install ansible 
-      - run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook ansible/main.yml -i ansible/inventory.txt
+      # - run: sudo apt-get install ansible 
+      # - run: |
+      #     export ANSIBLE_HOST_KEY_CHECKING=False
+      #     ansible-playbook ansible/main.yml -i ansible/inventory.txt
+      - run: sudo apt-get install curl
+      - run: curl www.alsñkdfj.com
+      - run: 
+          name: catch error
+          command: |
+            echo failed
+            return 1
+          when: on_fail
+      
+
 workflows:
   main:
     jobs:   
