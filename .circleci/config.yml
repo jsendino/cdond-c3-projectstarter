@@ -1,26 +1,43 @@
 version: 2.1
 
+commands: 
+  destroy_env:
+    description: "Destroys CloudFormation stack"
+    parameters:
+      env_name: 
+        type: string
+    steps:
+      - run: aws cloudformation delete-stack --stack-name << parameters.env_name >> 
+
 jobs:
   create_infra:
     docker:
-      - image: circleci/python:3.6.1 # every job must define an image for the docker executor and subsequent jobs may define a different image.
+      - image: amazon/aws-cli
     steps:
-      - add_ssh_keys:
-          fingerprints: 
-            - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
+      # - add_ssh_keys:
+      #     fingerprints: 
+      #       - "65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb" 
       - checkout
+      - run: >
+        aws cloudformation deploy \
+                --template-file template.yml \
+                --stack-name udacity-cd-infra
+      - run: 
+          name: Delete env if failure
+          command: destroy_env udacity-cd-infra
+          when: on_fail
       # - run: sudo apt-get install ansible 
       # - run: |
       #     export ANSIBLE_HOST_KEY_CHECKING=False
       #     ansible-playbook ansible/main.yml -i ansible/inventory.txt
-      - run: sudo apt-get install curl
-      - run: curl www.alsñkdfj.com
-      - run: 
-          name: catch error
-          command: |
-            echo failed
-            exit 1
-          when: on_fail
+      # - run: sudo apt-get install curl
+      # - run: curl www.alsñkdfj.com
+      # - run: 
+      #     name: catch error
+      #     command: |
+      #       echo failed
+      #       exit 1
+      #     when: on_fail
       
 
 workflows:
