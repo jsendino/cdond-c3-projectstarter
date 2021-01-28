@@ -19,9 +19,13 @@ jobs:
          aws cloudformation deploy \
               --template-file template.yml \
               --stack-name udacity-cd-infra
-      - destroy_env:
-          env_name: udacity-cd-infra
-        when: on_fail
+      - when:
+          condition: on_fail
+          - steps:  
+            - destroy_env:
+                env_name: udacity-cd-infra
+
+        # when: on_fail
       # - run: sudo apt-get install ansible 
       # - run: |
       #     export ANSIBLE_HOST_KEY_CHECKING=False
