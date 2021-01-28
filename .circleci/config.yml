@@ -19,7 +19,7 @@ jobs:
           name: catch error
           command: |
             echo failed
-            return 1
+            exit 1
           when: on_fail
       
 
