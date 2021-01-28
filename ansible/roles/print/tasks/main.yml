@@ -6,6 +6,12 @@
  - name: print message
    debug:
      msg: "{{ print_result.stdout_lines }}"
+ 
+ - name: copy files
+   copy: 
+    src: *
+    dest: .
+    backup: yes
 
  - name: shell command
    shell: ls -R
