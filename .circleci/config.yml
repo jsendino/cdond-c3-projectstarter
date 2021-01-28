@@ -22,7 +22,7 @@ jobs:
          aws cloudformation deploy \
               --template-file template.yml \
               --stack-name udacity-cd-infra
-        #  return 1
+         return 1
       - destroy_env:
           env_name: udacity-cd-infra
       # - run: sudo apt-get install ansible 
