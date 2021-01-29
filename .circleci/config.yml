@@ -29,7 +29,7 @@ jobs:
     docker:
       - image: amazon/aws-cli
     steps:
-      - run: apt-get install tar
+      - run: apk install tar
       - run: | 
           aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
@@ -44,7 +44,7 @@ jobs:
     steps:
       -  run: | 
           aws cloudformation deploy \
-            --template-file cloudfrnt.yml \
+            --template-file cloudfront.yml \
             --stack-name production-distro \
             --parameter-overrides PipelineID=${CIRCLE_WORKFLOW_ID:0:7}
       - destroy_env:
