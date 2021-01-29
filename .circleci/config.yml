@@ -42,7 +42,7 @@ jobs:
     docker:
       - image: amazon/aws-cli  
     steps:
-      -  run: | 
+      - run: | 
          aws cloudformation deploy \
           --template-file cloudfront.yml \
           --stack-name production-distro \
