@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run: |
          aws cloudformation deploy \
-          --template-file bucket.yml \
+          --template-file ../bucket.yml \
           --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \ # ${CIRCLE_WORKFLOW_ID:0:7} takes the first 7 chars of the variable CIRCLE_CI_WORKFLOW_ID
           --parameter-overrides NAME="${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_env:
@@ -43,7 +43,7 @@ jobs:
     steps:
       -  run: > 
           aws cloudformation deploy \
-            --template-file cloudfront.yml \
+            --template-file ../cloudfront.yml \
             --stack-name production-distro \
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_env:
