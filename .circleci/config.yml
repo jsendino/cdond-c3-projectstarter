@@ -13,33 +13,56 @@ commands:
           when: on_fail
 
 jobs:
-  create_infra:
+  create_and_deploy_front_end:
     docker:
       - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
     steps:
       - checkout
       - run: |
          aws cloudformation deploy \
-              --template-file template.yml \
-              --stack-name udacity-cd-infra
-         return 1
+          --template-file bucket.yml \
+          --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \ # ${CIRCLE_WORKFLOW_ID:0:7} takes the first 7 chars of the variable CIRCLE_CI_WORKFLOW_ID
+          --parameter-overrides NAME="${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_env:
-          env_name: udacity-cd-infra
-      # - run: sudo apt-get install ansible 
-      # - run: |
-      #     export ANSIBLE_HOST_KEY_CHECKING=False
-      #     ansible-playbook ansible/main.yml -i ansible/inventory.txt
-      # - run: sudo apt-get install curl
-      # - run: curl www.alsñkdfj.com
-      # - run: 
-      #     name: catch error
-      #     command: |
-      #       echo failed
-      #       exit 1
-      #     when: on_fail
-      
+          env_name: ${CIRCLE_WORKFLOW_ID:0:7}
+  get_last_deployment_id:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - run: > 
+          aws cloudformation \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+            --no-paginate --output text >> pipeline_id.txt
+      - persist_to_workspace:
+          root: .
+          paths:
+            - pipeline_id.txt
+  promote_to_production:
+    docker:
+      - image: amazon/aws-cli  
+    steps:
+      -  run: > 
+          aws cloudformation deploy \
+            --template-file cloudfront.yml \
+            --stack-name production-distro \
+            --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
+  clean_up_old_front_end: 
+    docker:
+      - image: amazon/aws-cli  
+    steps:
+      - attach_workspace:
+          at: .
+      -  run: |
+        OldPipelineID=`cat pipeline_id.txt`
+        aws s3 rm "s3://${OldPipelineID}" --recursive
+        aws cloudformation delete-stack --stack-name "${OldPipelineID}"
 
 workflows:
   main:
     jobs:   
-      - create_infra
+      - create_and_deploy_front_end
+      - get_last_deployment_id
+      - promote_to_production
+      - clean_up_old_front_end:
+          requires: 
+            - get_last_deployment_id
