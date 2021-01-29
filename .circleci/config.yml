@@ -42,9 +42,14 @@ jobs:
     docker:
       - image: amazon/aws-cli  
     steps:
-      - run: | 
+      - run: |
          aws cloudformation deploy \
           --template-file bucket.yml \
+          --stack-name "stack-${CIRCLE_WORKFLOW_ID:0:7}" \
+          --parameter-overrides NAME=${CIRCLE_WORKFLOW_ID:0:7}
+      - run: | 
+         aws cloudformation deploy \
+          --template-file cloudfront.yml \
           --stack-name production-distro \
           --parameter-overrides PipelineID=${CIRCLE_WORKFLOW_ID:0:7}
       - destroy_env:
