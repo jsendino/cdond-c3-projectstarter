@@ -52,9 +52,8 @@ jobs:
           env_name: ${CIRCLE_WORKFLOW_ID:0:7}
   clean_up_old_front_end: 
     docker:
-      - image: amazon/aws-cli  
+      - image: cibuilds/aws:1.16.1
     steps:
-      - run: apk install tar
       - attach_workspace:
           at: .
       -  run: |
