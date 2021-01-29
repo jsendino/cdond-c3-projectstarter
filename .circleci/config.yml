@@ -22,7 +22,7 @@ jobs:
          aws cloudformation deploy \
           --template-file bucket.yml \
           --stack-name "stack-${CIRCLE_WORKFLOW_ID:0:7}" \
-          --parameter-overrides NAME=${CIRCLE_WORKFLOW_ID:0:7}
+          --parameter-overrides NAME="bucket-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_env:
           env_name: ${CIRCLE_WORKFLOW_ID:0:7}
   get_last_deployment_id:
@@ -57,8 +57,8 @@ jobs:
           at: .
       -  run: |
           OldPipelineID=`cat pipeline_id.txt`
-          aws s3 rm "s3://${OldPipelineID}" --recursive
-          aws cloudformation delete-stack --stack-name "${OldPipelineID}"
+          aws s3 rm "s3://bucket-${OldPipelineID}" --recursive
+          aws cloudformation delete-stack --stack-name "stack-${OldPipelineID}"
 
 workflows:
   main:
