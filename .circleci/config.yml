@@ -27,9 +27,8 @@ jobs:
           env_name: ${CIRCLE_WORKFLOW_ID:0:7}
   get_last_deployment_id:
     docker:
-      - image: amazon/aws-cli
+      - image: cibuilds/aws:1.16.1
     steps:
-      - run: apk install tar
       - run: | 
           aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
