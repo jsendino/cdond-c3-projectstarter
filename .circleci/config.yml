@@ -80,7 +80,6 @@ jobs:
               cd frontend
               npm i 
               npm run test
-      # Your job code here
                 
   test-backend:
     docker:
@@ -92,7 +91,7 @@ jobs:
       - run:
           name: backend-end test
           command: |
-              cd backtend
+              cd backend
               npm i 
               npm run test
 
