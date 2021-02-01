@@ -44,7 +44,6 @@ jobs:
           name: Build front-end
           command: |
             cd frontend
-            npm update
             npm i
             npm run build
       - save_cache:
@@ -62,7 +61,6 @@ jobs:
           name: Back-end build
           command: |
               cd backend
-              npm update
               npm i
               npm run build
       - save_cache:
