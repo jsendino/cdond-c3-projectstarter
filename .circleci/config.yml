@@ -1,17 +1,16 @@
 version: 2.1
 
 commands:
-  destroy-environment:
-    description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
+  destroy_environment:
+    description: "Destroys CloudFormation stack"
     parameters:
-      # Add parameter here   
+      env_name: 
+        type: string
     steps:
       - run:
-          name: Destroy environments
+          name: Destroy env if error
+          command: aws cloudformation delete-stack --stack-name << parameters.env_name >> 
           when: on_fail
-          command: |
-            # Your code here
-            exit 1
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
@@ -149,12 +148,34 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} \
               --output text >> .circleci/ansible/inventory.txt
-      - run: ls -R
       - persist_to_workspace:
           root: .
           paths:
             - .circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure  
+      - destroy_env:
+          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_env:
+          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"
+
+  configure-infrastructure:
+    docker:
+      # Docker image here that supports Ansible
+    steps:
+      # Checkout code from git
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            # Your code here
+            exit 1
+      - run:
+          name: Configure server
+          command: |
+            # Your code here
+            exit 1
+      # Here's where you will add some code to rollback on failure
 
 workflows:
   default:
