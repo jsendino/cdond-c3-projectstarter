@@ -160,21 +160,22 @@ jobs:
 
   configure-infrastructure:
     docker:
-      # Docker image here that supports Ansible
+      - image: cibuilds/aws:1.16.1
     steps:
-      # Checkout code from git
-      # Add ssh keys with fingerprint
-      # attach workspace
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb"]
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           command: |
-            # Your code here
-            exit 1
+            sudo apt-get install ansible 
       - run:
           name: Configure server
           command: |
-            # Your code here
-            exit 1
+            ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
+            
       # Here's where you will add some code to rollback on failure
 
 workflows:
