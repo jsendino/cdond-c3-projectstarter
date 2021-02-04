@@ -14,15 +14,20 @@
     sudo apt-get install nodejs
 
     # 5. Install PM2
-    sudo apt-get install pm2
+    sudo npm install pm2 -g
 
- - name: Set-up env variables
+ - name: Set-up env variables and install pm2
    environment:
-    ENVIRONMENT: Production
-    TYPEORM_CONNECTION: postgres
-    TYPEORM_ENTITIES: ./src/modules/domain/**/*.entity.ts
-    TYPEORM_HOST: udacityproject.c5cjhltyuv22.eu-west-1.rds.amazonaws.com
-    TYPEORM_PORT: 5432
-    TYPEORM_USERNAME: postgres
-    TYPEORM_PASSWORD: postgres
-    TYPEORM_DATABASE: udacityproject
+     ENVIRONMENT: Production
+     TYPEORM_CONNECTION: postgres
+     TYPEORM_ENTITIES: ./src/modules/domain/**/*.entity.ts
+     TYPEORM_HOST: udacityproject.c5cjhltyuv22.eu-west-1.rds.amazonaws.com
+     TYPEORM_PORT: 5432
+     TYPEORM_USERNAME: postgres
+     TYPEORM_PASSWORD: postgres
+     TYPEORM_DATABASE: udacityproject
+   shell: |
+     sudo apt-get install libcap2-bin
+     sudo setcap cap_net_bind_service=+ep /usr/local/bin/node
+     
+     pm2 start backend/src/main.ts
