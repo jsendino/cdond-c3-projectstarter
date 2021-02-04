@@ -161,7 +161,6 @@ jobs:
   configure-infrastructure:
     docker:
       - image: circleci/python:3.6.1
-      - image: cibuilds/aws:1.16.1
     steps:
       - checkout
       - add_ssh_keys:
@@ -176,6 +175,7 @@ jobs:
           name: Configure server
           command: |
             export ANSIBLE_HOST_KEY_CHECKING=False
+            cat .circleci/ansible/inventory.txt
             ansible-playbook .circleci/ansible/configure-server.yml -i .circleci/ansible/inventory.txt
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
