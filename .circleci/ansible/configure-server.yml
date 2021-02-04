@@ -12,9 +12,9 @@
   pre_tasks:
     - name: "install python for Ansible."
       shell: |
-      sudo add-apt-repository ppa:deadsnakes/ppa -y
-      sudo apt update
-      sudo apt install python3.6 -y
+        sudo add-apt-repository ppa:deadsnakes/ppa -y
+        sudo apt update
+        sudo apt install python3.6 -y
 
   roles:
     - configure-server
