@@ -160,7 +160,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: circleci/python:3.6.1
+      - image: circleci/python:3.8
     steps:
       - checkout
       - add_ssh_keys:
@@ -170,7 +170,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip3 install ansible
+            sudo pip3 install ansible
       - run:
           name: Configure server
           command: |
