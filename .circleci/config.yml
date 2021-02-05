@@ -170,8 +170,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install ansible 
+            pip3 install ansible
       - run:
           name: Configure server
           command: |
