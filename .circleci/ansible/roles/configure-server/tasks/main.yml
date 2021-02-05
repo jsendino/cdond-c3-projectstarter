@@ -6,7 +6,6 @@
     sudo apt-get install npm -y
     sudo npm install pm2 -g
     sudo npm install -g ts-node
-    sudo ln -s /usr/bin/nodejs /usr/bin/node
  - name: Set-up env variables and install pm2
    environment:
      ENVIRONMENT: Production
