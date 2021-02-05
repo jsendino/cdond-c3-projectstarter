@@ -10,8 +10,8 @@ commands:
       - run:
           name: Destroy env if error
           command: |
-          sudo apt-get install awscli -y
-          aws cloudformation delete-stack --stack-name << parameters.env_name >> 
+            sudo apt-get install awscli -y
+            aws cloudformation delete-stack --stack-name << parameters.env_name >> 
           when: on_fail
 
   revert-migrations:
