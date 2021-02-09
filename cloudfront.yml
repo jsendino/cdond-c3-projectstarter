@@ -1,24 +1,9 @@
-<<<<<<< HEAD
-Description: >
-  Cloudfront distribution for UdaPeople.
-
-Parameters:
-  WorkflowID:
-    Description: Unique identifier.
-    Type: String
-
-
-Resources:
-  
-=======
 Parameters:
   PipelineID:
     Description: Unique identifier.
     Type: String
 
 Resources:
-
->>>>>>> 0a30ad90f6933f08cfdc5b33e32531accc735f91
   CloudFrontOriginAccessIdentity:
     Type: "AWS::CloudFront::CloudFrontOriginAccessIdentity"
     Properties:
@@ -30,11 +15,7 @@ Resources:
     Properties:
       DistributionConfig:
         Origins:
-<<<<<<< HEAD
-          - DomainName: !Sub "udapeople-${WorkflowID}.s3.amazonaws.com"
-=======
           - DomainName: !Sub "${PipelineID}.s3.amazonaws.com"
->>>>>>> 0a30ad90f6933f08cfdc5b33e32531accc735f91
             Id: webpage
             S3OriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}"
@@ -47,15 +28,7 @@ Resources:
           ViewerProtocolPolicy: allow-all
 
 Outputs:
-<<<<<<< HEAD
-  WorkflowID:
-    Value: !Sub ${WorkflowID}
-    Description: URL for website hosted on S3
-    Export:
-      Name: WorkflowID
-=======
   PipelineID:
     Value: !Sub ${PipelineID}
     Export:
       Name: PipelineID
->>>>>>> 0a30ad90f6933f08cfdc5b33e32531accc735f91

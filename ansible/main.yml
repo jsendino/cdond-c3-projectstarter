@@ -1,0 +1,8 @@
+---
+- name: Exercise #1
+  hosts: all
+
+  user: ec2-user
+
+  roles:
+    - print
