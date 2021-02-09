@@ -10,6 +10,7 @@ commands:
       - run:
           name: Destroy env if error
           command: |
+            sudo run apt-get update
             sudo apt-get install awscli -y
             aws cloudformation delete-stack --stack-name << parameters.env_name >> 
           when: on_fail
@@ -190,7 +191,8 @@ jobs:
       - run:
           name: Run migrations
           command: |
-            npm run migrations | tee migrations_result.txt
+            cd backend
+            npm run migrations >> ../migrations_result.txt
       - run:
           name: Send migration results to memstash
           command: |
