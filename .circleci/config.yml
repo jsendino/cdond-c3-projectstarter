@@ -194,15 +194,15 @@ jobs:
       - run:
           name: Send migration results to memstash
           command: |
-           if cat migrations_result.txt | grep "has been executed successfully" ; then
+            if cat migrations_result.txt | grep "has been executed successfully" ; then
               curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
               --request PUT --data "sucess" \
               https://api.memstash.io/values/migration_result
-          else
-            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
+            else
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
               --request PUT --data "fail" \
               https://api.memstash.io/values/migration_result
-          fi
+            fi
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
