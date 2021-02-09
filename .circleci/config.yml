@@ -1,12 +1,7 @@
 version: 2.1
 
-<<<<<<< HEAD
 commands:
   destroy_environment:
-=======
-commands: 
-  destroy_env:
->>>>>>> 0a30ad90f6933f08cfdc5b33e32531accc735f91
     description: "Destroys CloudFormation stack"
     parameters:
       env_name: 
@@ -14,7 +9,6 @@ commands:
     steps:
       - run:
           name: Destroy env if error
-<<<<<<< HEAD
           command: |
             sudo apt-get install awscli -y
             aws cloudformation delete-stack --stack-name << parameters.env_name >> 
@@ -113,7 +107,6 @@ jobs:
               cd frontend
               npm audit fix --audit-level=critical --force
               npm audit --audit-level=critical
-
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -127,7 +120,6 @@ jobs:
               cd backend
               npm audit fix --audit-level=critical --force
               npm audit --audit-level=critical
-
   deploy-infrastructure:
     docker:
       - image: cibuilds/aws:1.16.1
@@ -189,7 +181,33 @@ jobs:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
           env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"   
-      
+
+  run-migrations:
+    docker:
+      # Docker image here that supports NodeJS
+    steps:
+      - checkout 
+      - run:
+          name: Run migrations
+          command: |
+            npm run migrations | tee migrations_result.txt
+      - run:
+          name: Send migration results to memstash
+          command: |
+           if cat migrations_result.txt | grep "has been executed successfully" ; then
+              curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
+              --request PUT --data "sucess" \
+              https://api.memstash.io/values/migration_result
+          else
+            curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
+              --request PUT --data "fail" \
+              https://api.memstash.io/values/migration_result
+          fi
+      - destroy_environment:
+          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"   
+     # Here's where you will add some code to rollback on failure
 
 workflows:
   default:
@@ -211,9 +229,8 @@ workflows:
               only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
-
-      # - run-migrations:
-      #     requires: [configure-infrastructure]
+      - run-migrations:
+          requires: [configure-infrastructure]
       # - deploy-frontend:
       #     requires: [run-migrations]
       # - deploy-backend:
@@ -224,69 +241,3 @@ workflows:
       #     requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
-=======
-          command: aws cloudformation delete-stack --stack-name << parameters.env_name >> 
-          when: on_fail
-
-jobs:
-  create_and_deploy_front_end:
-    docker:
-      - image: amazon/aws-cli # every job must define an image for the docker executor and subsequent jobs may define a different image.
-    steps:
-      - checkout
-      - run: |
-         aws cloudformation deploy \
-          --template-file bucket.yml \
-          --stack-name "stack-${CIRCLE_WORKFLOW_ID:0:7}" \
-          --parameter-overrides NAME="bucket-${CIRCLE_WORKFLOW_ID:0:7}"
-      - destroy_env:
-          env_name: ${CIRCLE_WORKFLOW_ID:0:7}
-  get_last_deployment_id:
-    docker:
-      - image: cibuilds/aws:1.16.1
-    steps:
-      - run: | 
-          aws cloudformation \
-            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-            --no-paginate --output text >> pipeline_id.txt
-      - persist_to_workspace:
-          root: .
-          paths:
-            - pipeline_id.txt
-  promote_to_production:
-    docker:
-      - image: amazon/aws-cli  
-    steps:
-      - checkout
-      - run: | 
-         aws cloudformation deploy \
-          --template-file cloudfront.yml \
-          --stack-name production-distro \
-          --parameter-overrides PipelineID=${CIRCLE_WORKFLOW_ID:0:7}
-      - destroy_env:
-          env_name: ${CIRCLE_WORKFLOW_ID:0:7}
-  clean_up_old_front_end: 
-    docker:
-      - image: cibuilds/aws:1.16.1
-    steps:
-      - attach_workspace:
-          at: .
-      -  run: |
-          OldPipelineID=`cat pipeline_id.txt`
-          aws s3 rm "s3://bucket-${OldPipelineID}" --recursive
-          aws cloudformation delete-stack --stack-name "stack-${OldPipelineID}"
-
-workflows:
-  main:
-    jobs:  
-      - get_last_deployment_id 
-      - create_and_deploy_front_end:
-          requires: 
-            - get_last_deployment_id
-      - promote_to_production:
-          requires: 
-            - create_and_deploy_front_end
-      - clean_up_old_front_end:
-          requires: 
-            - promote_to_production
->>>>>>> 0a30ad90f6933f08cfdc5b33e32531accc735f91
