@@ -72,6 +72,8 @@ jobs:
               cd backend
               npm i
               npm run build
+              ls .
+      - run: exit 1
       - save_cache:
           paths: [backend/*]
           key: backend-build
