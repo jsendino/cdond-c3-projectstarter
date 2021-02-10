@@ -220,10 +220,11 @@ jobs:
   deploy-frontend:
     docker:
       - image: cibuilds/aws:1.16.1
-    steps:
+    steps:  
+      - run: cat /etc/os-release
+      - checkout
       - attach_workspace:
           at: .
-      - checkout
       - run:
           name: Get backend url
           command: |
