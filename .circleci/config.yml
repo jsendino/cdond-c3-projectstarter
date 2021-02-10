@@ -270,8 +270,8 @@ jobs:
             export ANSIBLE_HOST_KEY_CHECKING=False
             cat .circleci/ansible/ip.txt >> .circleci/ansible/inventory.txt
 
-            mkdir .circleci/ansible/deploy/files
-            cp -r backend/dist/ .circleci/ansible/deploy/files/
+            mkdir .circleci/ansible/deploy/roles/files
+            cp -r backend/dist/ .circleci/ansible/roles/deploy/files/
 
             ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
       - destroy_environment:
