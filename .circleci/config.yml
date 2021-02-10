@@ -264,6 +264,7 @@ jobs:
           name: Install dependencies
           command: |
             sudo pip3 install ansible
+            curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt-get install -y nodejs
             sudo apt-get install npm -y
       - run:
@@ -273,8 +274,11 @@ jobs:
             cat .circleci/ansible/ip.txt >> .circleci/ansible/inventory.txt
 
             mkdir .circleci/ansible/roles/deploy/files
-            npm build
+            cd backend
+            npm run build
             ls -R 
+
+            
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
