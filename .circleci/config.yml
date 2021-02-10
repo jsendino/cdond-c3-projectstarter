@@ -10,8 +10,13 @@ commands:
       - run:
           name: Destroy env if error
           command: |
-            sudo apt-get update
-            sudo apt-get install awscli -y
+            if cat /etc/os-release | grep "rhel" ; then
+              yum update
+              yum install awscli
+            else
+              sudo apt-get update
+              sudo apt-get install awscli -y
+            fi
             aws cloudformation delete-stack --stack-name << parameters.env_name >> 
           when: on_fail
 
