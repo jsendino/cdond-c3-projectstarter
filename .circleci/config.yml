@@ -15,8 +15,7 @@ commands:
               yum update
               yum install awscli
             elif cat /etc/os-release | grep "alpine" ; then
-              apk update
-              apk add awscli
+              echo "AWS CLI not available in alpine"
             else
               sudo apt-get update
               sudo apt-get install awscli -y
@@ -232,7 +231,7 @@ jobs:
           name: Install dependencies
           command : |
             apk update
-            apk add npm
+            apk add --update nodejs
       - run:
           name: Get backend url
           command: |
