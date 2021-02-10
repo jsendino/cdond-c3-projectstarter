@@ -243,6 +243,7 @@ jobs:
           name: Deploy frontend objects
           command: |
             cd frontend
+            npm install
             npm run build
             aws s3 cp .dist s3://udapeople-210994js/.dist
       # Here's where you will add some code to rollback on failure     
