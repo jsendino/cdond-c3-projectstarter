@@ -73,7 +73,9 @@ jobs:
               npm i
               npm run build
       - save_cache:
-          paths: [backend/node_modules, backend/dist]
+          paths: 
+            - backend/node_modules
+            - backend/dist
           key: backend-build
 
   test-frontend:
