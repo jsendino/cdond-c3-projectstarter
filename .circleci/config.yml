@@ -72,7 +72,7 @@ jobs:
               cd backend
               npm i
               npm run build
-              tar -czvf build artifact.tz 
+              tar -czvf artifact.tz  build 
       - save_cache:
           paths: [backend/*]
           key: backend-build
