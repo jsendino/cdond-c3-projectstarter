@@ -72,6 +72,7 @@ jobs:
               cd backend
               npm i
               npm run build
+              ls -R 
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
@@ -253,7 +254,7 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - add_ssh_keys:
@@ -263,8 +264,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo pip3 install ansible
-            curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+            # sudo pip3 install ansible
+            # curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
             sudo apt-get update
             sudo apt-get install -y nodejs
             sudo apt-get install npm -y
@@ -278,6 +279,8 @@ jobs:
             cd backend
             npm run build
             ls -R 
+      - destroy_environment:
+          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
           env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
 
