@@ -73,7 +73,6 @@ jobs:
               npm i
               npm run build
               ls .
-      - run: exit 1
       - save_cache:
           paths: [backend/*]
           key: backend-build
@@ -103,7 +102,9 @@ jobs:
           name: backend test
           command: |
               cd backend
+              ls 
               npm run test
+      - run: exit 1
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
