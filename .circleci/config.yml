@@ -73,9 +73,7 @@ jobs:
               npm i
               npm run build
       - save_cache:
-          paths: 
-            - backend/dist
-            - backend/node_modules
+          paths: [backend/*]
           key: backend-build
 
   test-frontend:
@@ -259,10 +257,10 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb"]
-      - attach_workspace:
-          at: .
       - restore_cache:
           keys: [backend-build]
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           command: |
