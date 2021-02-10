@@ -7,6 +7,7 @@ commands:
       env_name: 
         type: string
     steps:
+      - run: cat /etc/os-release
       - run:
           name: Destroy env if error
           command: |
