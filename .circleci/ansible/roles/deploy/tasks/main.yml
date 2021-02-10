@@ -1,0 +1,6 @@
+---
+ - name: copy files
+   copy: 
+    src: dist/*
+    dest: dist/*
+    backup: yes

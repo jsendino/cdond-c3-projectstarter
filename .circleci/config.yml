@@ -244,12 +244,41 @@ jobs:
             cd frontend
             npm install
             npm run build
-            aws s3 cp --recursive ./dist/ s3://udapeople-210994js/dist
+            aws s3 cp --recursive ./dist/ s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}/dist
       # Here's where you will add some code to rollback on failure     
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
           env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"   
+
+  deploy-backend:
+    docker:
+      - image: circleci/python:3.8
+    steps:
+      - checkout
+      - add_ssh_keys:
+          fingerprints: ["65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb"]
+      - attach_workspace:
+          at: .
+      - run:
+          name: Install dependencies
+          command: |
+            sudo pip3 install ansible
+      - run:
+          name: Deploy backend
+          command: |
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            cat .circleci/ansible/ip.txt >> .circleci/ansible/inventory.txt
+
+            mkdir .circleci/ansible/deploy/files
+            cp -r backend/dist/ .circleci/ansible/deploy/files/
+
+            ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
+      - destroy_environment:
+          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+
 workflows:
   default:
     jobs:
