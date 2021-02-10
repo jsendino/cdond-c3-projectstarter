@@ -14,7 +14,8 @@ commands:
             if cat /etc/os-release | grep "rhel" ; then
               yum update
               yum install awscli
-            elif if cat /etc/os-release | grep "alpine" ; then
+            elif cat /etc/os-release | grep "alpine" ; then
+              apk update
               apk add awscli
             else
               sudo apt-get update
@@ -230,6 +231,7 @@ jobs:
       - run: 
           name: Install dependencies
           command : |
+            apk update
             apk add npm
       - run:
           name: Get backend url
