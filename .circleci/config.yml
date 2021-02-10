@@ -271,9 +271,7 @@ jobs:
             cat .circleci/ansible/ip.txt >> .circleci/ansible/inventory.txt
 
             mkdir .circleci/ansible/roles/deploy/files
-            cp -r backend/dist/ .circleci/ansible/roles/deploy/files/
-
-            ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
+            ls -R 
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
