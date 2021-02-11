@@ -305,10 +305,6 @@ jobs:
           command: |
             BACKEND_IP=`cat .circleci/ansible/ip.txt`
       - run:
-          name: Backend smoke test.
-          command: |
-            curl "${BACKEND_IP}:3000/api/status"
-      - run:
           name: Frontend smoke test.
           command: |
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-eu-west-1.amazonaws.com"
@@ -318,10 +314,15 @@ jobs:
             else
             return 0
             fi
-      - destroy_environment:
-          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
-      - destroy_environment:
-          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      - run:
+          name: Backend smoke test.
+          command: |
+            curl "${BACKEND_IP}:3000/api/status"
+      
+      # - destroy_environment:
+      #     env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      # - destroy_environment:
+      #     env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
 
 workflows:
   default:
