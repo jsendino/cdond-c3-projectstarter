@@ -2,7 +2,7 @@
  - name: copy files
    copy: 
     src: backend.tar.gz
-    dest: backend.tar.gz
+    dest: .
  - name: "use pm2 to runserver"
    shell: |
      tar -xfz backend.tar.gz
