@@ -280,7 +280,7 @@ jobs:
             cat .circleci/ansible/ip.txt >> .circleci/ansible/inventory.txt
 
             mkdir .circleci/ansible/roles/deploy/files
-            cp -r backend/dist .circleci/ansible/roles/deploy/files
+            cp -r backend/dist/ .circleci/ansible/roles/deploy/files/dist/
             ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
 
       - destroy_environment:
