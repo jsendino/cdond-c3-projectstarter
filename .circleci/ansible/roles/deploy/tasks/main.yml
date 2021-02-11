@@ -10,4 +10,4 @@
  - name: "use pm2 to runserver"
    shell: |
      cd backend
-     pm2 start npm -- run
+     
