@@ -4,6 +4,7 @@
     curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
     sudo apt-get install -y nodejs
     sudo apt-get install npm -y
+    sudo apt-get install tar -y
     sudo npm install pm2 -g
     sudo npm install -g ts-node
  - name: Set-up env variables and install pm2
@@ -11,16 +12,14 @@
      ENVIRONMENT: Production
      TYPEORM_CONNECTION: postgres
      TYPEORM_ENTITIES: ./src/modules/domain/**/*.entity.ts
-     TYPEORM_HOST: udacityproject.c5cjhltyuv22.eu-west-1.rds.amazonaws.com
+     TYPEORM_HOST: 	udapeople.c5cjhltyuv22.eu-west-1.rds.amazonaws.com
      TYPEORM_PORT: 5432
      TYPEORM_USERNAME: postgres
-     TYPEORM_PASSWORD: postgres
-     TYPEORM_DATABASE: udacityproject
+     TYPEORM_PASSWORD: udapeople
+     TYPEORM_DATABASE: postgres
    shell: |
      sudo apt-get install libcap2-bin -y
      sudo setcap cap_net_bind_service=+ep /usr/bin/nodejs
      
      sudo npm i ts-node typescript
      sudo ln -s /usr/bin/ts-node /usr/local/lib/node_modules/pm2/node_modules/.bin/ts-node
-
-     pm2 start backend/src/main.ts &

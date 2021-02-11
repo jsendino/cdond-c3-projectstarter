@@ -1,7 +1,13 @@
 ---
  - name: copy files
    copy: 
-    src: "{{ item }}"
-    dest: backend/
-   with_fileglob:
-    - dist/*
+    src: backend.tar.gz
+    dest: backend.tar.gz
+- name: "use pm2 to runserver"
+  shell: |
+    tar -xfz backend.tar.gz
+
+- name: "use pm2 to runserver"
+  shell: |
+    cd backend
+    pm2 start npm -- run
