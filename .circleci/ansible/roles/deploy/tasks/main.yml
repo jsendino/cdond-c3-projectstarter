@@ -5,7 +5,7 @@
     dest: .
  - name: "use pm2 to runserver"
    shell: |
-     tar -xfz backend.tar.gz
+     tar -xzf backend.tar.gz
 
  - name: "use pm2 to runserver"
    shell: |
