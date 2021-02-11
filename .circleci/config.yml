@@ -282,8 +282,6 @@ jobs:
             mkdir .circleci/ansible/roles/deploy/files
             cp -r backend/dist/ .circleci/ansible/roles/deploy/files/dist/
             
-            ls -R .circleci/ansible/roles/deploy/files/
-            
             ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
 
       - destroy_environment:
