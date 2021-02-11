@@ -2,6 +2,6 @@
  - name: copy files
    copy: 
     src: "{{ item }}"
-    dest: /etc/backend//
+    dest: backend/
    with_fileglob:
     - dist/*
