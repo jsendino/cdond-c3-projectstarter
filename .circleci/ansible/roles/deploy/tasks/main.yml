@@ -3,11 +3,11 @@
    copy: 
     src: backend.tar.gz
     dest: backend.tar.gz
-- name: "use pm2 to runserver"
-  shell: |
-    tar -xfz backend.tar.gz
+ - name: "use pm2 to runserver"
+   shell: |
+     tar -xfz backend.tar.gz
 
-- name: "use pm2 to runserver"
-  shell: |
-    cd backend
-    pm2 start npm -- run
+ - name: "use pm2 to runserver"
+   shell: |
+     cd backend
+     pm2 start npm -- run
