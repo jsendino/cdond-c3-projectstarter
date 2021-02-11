@@ -104,7 +104,6 @@ jobs:
               cd backend
               ls 
               npm run test
-      - run: exit 1
   scan-frontend:
     docker:
       - image: circleci/node:13.8.0
@@ -255,20 +254,25 @@ jobs:
 
   deploy-backend:
     docker:
-      - image: circleci/python:3.8
+      - image: circleci/python
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["65:25:32:d2:c6:d1:d5:3f:a0:b1:2c:77:e2:d3:0f:bb"]
-      - restore_cache:
-          keys: [backend-build]
       - attach_workspace:
           at: .
       - run:
           name: Install dependencies
           command: |
             sudo pip3 install ansible
-            ls backend -R 
+            sudo apt-get update
+            sudo apt-get install -y nodejs npm
+      - run: 
+          name: Build backend
+          command: |
+            cd backend
+            npm install
+            npm run build
       - run:
           name: Deploy backend
           command: |
