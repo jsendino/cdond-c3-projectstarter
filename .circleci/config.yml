@@ -281,8 +281,8 @@ jobs:
 
             mkdir .circleci/ansible/roles/deploy/files
             ls 
-            tar -czvf backend.tar.gz backend
-            cp backend.tar.gz .circleci/ansible/roles/deploy/files/dist/backend.tar.gz
+            tar -czf backend.tar.gz backend
+            cp backend.tar.gz .circleci/ansible/roles/deploy/files/backend.tar.gz
             
             ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
       - destroy_environment:
