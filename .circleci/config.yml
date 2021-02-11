@@ -280,7 +280,8 @@ jobs:
             cat .circleci/ansible/ip.txt >> .circleci/ansible/inventory.txt
 
             mkdir .circleci/ansible/roles/deploy/files
-            tar -cvfz backend.tar.gz backend
+            ls 
+            tar -czvf backend.tar.gz backend
             cp backend.tar.gz .circleci/ansible/roles/deploy/files/dist/backend.tar.gz
             
             ansible-playbook .circleci/ansible/deploy-backend.yml -i .circleci/ansible/inventory.txt
