@@ -24,7 +24,7 @@
   become: yes
   shell: |
     curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
-    sudo apt-get install nodejs
+    sudo apt-get install nodejs -y
 
 - name: Install dependencies
   become: yes
