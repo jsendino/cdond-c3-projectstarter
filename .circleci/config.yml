@@ -331,12 +331,7 @@ jobs:
           command: |
             BACKEND_IP=`cat .circleci/ansible/ip.txt`
             echo $BACKEND_IP
-            if curl "$BACKEND_IP:3030/api/status" | grep "ok"
-            then
-            return 0
-            else
-            return 1
-            fi
+            curl "$BACKEND_IP:3030/api/status"
       # - destroy_environment:
       #     env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       # - destroy_environment:
