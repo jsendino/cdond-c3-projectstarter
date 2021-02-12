@@ -22,9 +22,8 @@
 
 - name: "Add nodejs 14.x ppa for apt repo"
   become: yes
-  apt_repository:
-    repo: deb https://deb.nodesource.com/node_14.x bionic main
-    update_cache: yes
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
 
 - name: Install dependencies
   become: yes
