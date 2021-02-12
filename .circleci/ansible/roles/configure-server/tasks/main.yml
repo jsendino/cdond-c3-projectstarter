@@ -24,11 +24,12 @@
   become: yes
   shell: |
     curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
+    sudo apt-get install nodejs
 
 - name: Install dependencies
   become: yes
   apt:
-    name: ["nodejs", "npm", "tar"]
+    name: ["npm", "tar"]
     state: latest
     update_cache: yes
 
