@@ -275,6 +275,7 @@ jobs:
             npm run build
       - run:
           name: Create env file
+          command: |
             cd backend
             touch .env
             echo "ENVIROMENT=$ENVIROMENT" >> .env
