@@ -3,6 +3,12 @@
    copy: 
     src: backend.tar.gz
     dest: .
+
+ - name: "Update node to 13.X"
+   shell: |
+     curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
+     sudo apt-get install nodejs -y
+
  - name: "use pm2 to runserver"
    shell: |
      tar -xzf backend.tar.gz
@@ -10,4 +16,4 @@
  - name: "use pm2 to runserver"
    shell: |
      cd backend
-     
+     pm2 start npm --name backend -- start
