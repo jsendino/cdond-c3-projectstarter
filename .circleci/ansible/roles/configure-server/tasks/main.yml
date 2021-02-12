@@ -14,6 +14,16 @@
   apt:
     autoremove: yes
 
+- name: "Add nodejs apt key"
+  apt_key:
+    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+    state: present
+
+- name: "Add nodejs 14.x ppa for apt repo"
+  apt_repository:
+    repo: deb https://deb.nodesource.com/node_14.x bionic main
+    update_cache: yes
+
 - name: Install dependencies
   become: yes
   apt:
@@ -21,16 +31,19 @@
     state: latest
     update_cache: yes
 
-- name: Set-up env variables and install pm2
-  environment:
-    ENVIRONMENT: Production
-    TYPEORM_CONNECTION: postgres
-    TYPEORM_ENTITIES: ./src/modules/domain/**/*.entity.ts
-    TYPEORM_HOST: udapeople.c5cjhltyuv22.eu-west-1.rds.amazonaws.com
-    TYPEORM_PORT: 5432
-    TYPEORM_USERNAME: postgres
-    TYPEORM_PASSWORD: udapeople
-    TYPEORM_DATABASE: postgres
+- name: Set-up env variables
+  become: yes
+  shell: |
+    export ENVIRONMENT=Production
+    export TYPEORM_CONNECTION=postgres
+    export TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
+    export TYPEORM_HOST=udapeople.c5cjhltyuv22.eu-west-1.rds.amazonaws.com
+    export TYPEORM_PORT=5432
+    export TYPEORM_USERNAME=postgres
+    export TYPEORM_PASSWORD=udapeople
+    export TYPEORM_DATABASE=postgres
+
+- name: Install pm2
   become: yes
   npm:
     name: pm2
