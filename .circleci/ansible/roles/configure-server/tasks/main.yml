@@ -14,22 +14,22 @@
   apt:
     autoremove: yes
 
-- name: "Add nodejs apt key"
-  become: yes
-  apt_key:
-    url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
-    state: present
+# - name: "Add nodejs apt key"
+#   become: yes
+#   apt_key:
+#     url: https://deb.nodesource.com/gpgkey/nodesource.gpg.key
+#     state: present
 
-- name: "Add nodejs 14.x ppa for apt repo"
-  become: yes
-  shell: |
-    curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
-    sudo apt-get install nodejs -y
+# - name: "Add nodejs 14.x ppa for apt repo"
+#   become: yes
+#   shell: |
+#     curl -sL https://deb.nodesource.com/setup_13.x | sudo bash -
+#     sudo apt-get install nodejs -y
 
 - name: Install dependencies
   become: yes
   apt:
-    name: ["npm", "tar"]
+    name: ["npm", "tar", "nodejs"]
     state: latest
     update_cache: yes
 
