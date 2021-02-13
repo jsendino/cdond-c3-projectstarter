@@ -309,7 +309,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: alpine
+      - image: circleci/python
     steps:
       - checkout
       - attach_workspace:
@@ -353,8 +353,7 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-           OldPipelineID=`aws cloudformation list-exports \ 
-           --query "Exports[?Name==\`ID\`].Value"`
+           OldPipelineID=`aws cloudformation list-exports --query "Exports[?Name==\`ID\`].Value"`
           
            echo $OldPipelineID
 
