@@ -341,6 +341,41 @@ jobs:
           env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
       - revert_migrations
 
+  cloudfront-update:
+    docker:
+      - image: cibuilds/aws:1.16.1
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Update cloudfront distribution
+          command: |
+           OldPipelineID=`aws cloudformation list-exports \ 
+           --query "Exports[?Name==\`ID\`].Value"`
+          
+           echo $OldPipelineID
+
+           aws cloudformation deploy \
+            --template-file .circleci/files/cloudfront.yml \
+            --stack-name udapeople \
+            --parameter-overrides WorkflowID=${CIRCLE_WORKFLOW_ID:0:7}
+            --tags project=udapeople &
+
+           if [ $OldPipelineID != ${CIRCLE_WORKFLOW_ID:0:7} ]; then
+             aws s3 rm "s3://bucket-${OldPipelineID}" --recursive
+             aws cloudformation delete-stack --stack-name "frontend-${OldPipelineID}"
+             aws cloudformation delete-stack --stack-name "backend-${OldPipelineID}"
+           fi               
+      
+      - destroy_environment:
+          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      - revert_migrations
+
 workflows:
   default:
     jobs:
@@ -369,7 +404,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]
