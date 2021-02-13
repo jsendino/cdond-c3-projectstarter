@@ -22,25 +22,24 @@ commands:
             aws cloudformation delete-stack --stack-name << parameters.env_name >> 
           when: on_fail
 
-  revert-migrations:
+  revert_migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
-      # Add parameter here     
     steps:
       - run:
           name: Revert migrations
           # Add when this will run
           command: |
             # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+            SUCCESS=`curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
+              --request GET https://api.memstash.io/values/migration_result`
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
+              cd ~/project/backend
+              npm install
+              npm run migrations:revert
               exit 1
             fi
-            
+          when: on_fail
 jobs:
   build-frontend:
     docker:
@@ -208,17 +207,18 @@ jobs:
           command: |
             if cat migrations_result.txt | grep "has been executed successfully" ; then
               curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
-              --request PUT --data "sucess" \
+              --request PUT --data "1" \
               https://api.memstash.io/values/migration_result
             else
               curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID:0:7}" \
-              --request PUT --data "fail" \
+              --request PUT --data "0" \
               https://api.memstash.io/values/migration_result
             fi
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
           env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"   
+      - revert_migrations
 
   deploy-frontend:
     docker:
@@ -250,7 +250,8 @@ jobs:
       - destroy_environment:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
-          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}"   
+          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      - revert_migrations  
 
   deploy-backend:
     docker:
@@ -304,6 +305,7 @@ jobs:
           env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy_environment:
           env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      - revert_migrations
 
   smoke-test:
     docker:
@@ -333,10 +335,11 @@ jobs:
             BACKEND_IP=`cat .circleci/ansible/ip.txt`
             echo $BACKEND_IP
             curl "$BACKEND_IP:3030/api/status"
-      # - destroy_environment:
-      #     env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
-      # - destroy_environment:
-      #     env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      - destroy_environment:
+          env_name: "backend-${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy_environment:
+          env_name: "frontend-${CIRCLE_WORKFLOW_ID:0:7}" 
+      - revert_migrations
 
 workflows:
   default:
