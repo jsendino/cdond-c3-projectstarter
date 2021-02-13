@@ -14,7 +14,7 @@ commands:
               yum update
               yum install awscli
             elif cat /etc/os-release | grep "alpine" ; then
-              sudo apk add python3
+              apk add python3
               pip3 install awscli
             else
               sudo apt-get update
@@ -318,8 +318,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install curl
+            apk add install curl
       - run:
           name: Frontend smoke test.
           command: |
