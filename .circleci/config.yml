@@ -318,7 +318,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add install curl
+            apk add curl
       - run:
           name: Frontend smoke test.
           command: |
