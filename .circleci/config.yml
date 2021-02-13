@@ -14,7 +14,8 @@ commands:
               yum update
               yum install awscli
             elif cat /etc/os-release | grep "alpine" ; then
-              echo "AWS CLI not available in alpine"
+              sudo apk add python3
+              pip3 install awscli
             else
               sudo apt-get update
               sudo apt-get install awscli -y
@@ -309,7 +310,7 @@ jobs:
 
   smoke-test:
     docker:
-      - image: circleci/python
+      - image: alpine
     steps:
       - checkout
       - attach_workspace:
