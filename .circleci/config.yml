@@ -354,7 +354,11 @@ jobs:
       - run:
           name: Update cloudfront distribution
           command: |
-           OldPipelineID=`aws cloudformation list-exports --query "Exports[?Name==\`ID\`].Value"`
+           aws cloudformation \
+            list-exports --query "Exports[?Name==\`ID\`].Value" \
+            --no-paginate --output text >> pipeline_id.txt
+          
+           OldPipelineID=`cat pipeline_id.txt`
           
            echo $OldPipelineID
 
