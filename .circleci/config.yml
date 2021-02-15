@@ -360,8 +360,6 @@ jobs:
           
            OldPipelineID=`cat pipeline_id.txt`
           
-           echo $OldPipelineID
-
            aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name udapeople \
@@ -410,5 +408,4 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+     
