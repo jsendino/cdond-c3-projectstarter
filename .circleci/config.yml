@@ -360,7 +360,8 @@ jobs:
             --no-paginate --output text >> pipeline_id.txt
           
            OldPipelineID=`cat pipeline_id.txt`
-          
+           echo $OldPipelineID
+
            aws cloudformation deploy \
             --template-file .circleci/files/cloudfront.yml \
             --stack-name udapeople \
