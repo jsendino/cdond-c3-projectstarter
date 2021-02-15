@@ -246,17 +246,15 @@ jobs:
             apk update
             apk add --update nodejs
       - run:
-          name: Get backend url
+          name: Get backend url and deploy frontend objects
           command: |
-            # your code here
+            cd frontend
+
             BACKEND_IP=`cat .circleci/ansible/ip.txt`
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
-            echo "${API_URL}" >> "frontend/.env"
-      - run:
-          name: Deploy frontend objects
-          command: |
-            cd frontend
+            echo "${API_URL}" >> ".env"
+
             npm install
             npm run build
             aws s3 cp --recursive ./dist/ s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}
